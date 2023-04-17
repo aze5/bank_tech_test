@@ -13,4 +13,15 @@ describe BankAccount do
     account.deposit(1000, "01/10/2021")
     expect(account.transactions).to eq [{amount: 1000, date:"01/10/2021"}] 
   end
+
+  it "statement shows with all transactions" do
+    io = double :kernel
+    account = BankAccount.new(io)
+    account.deposit(1000, "01/10/2021")
+    account.deposit(2000, "05/10/2021")
+    expect(io).to receive(:puts).with("date || credit || debit || balance")
+    expect(io).to receive(:puts).with("01/10/2021 || 1000 || || 1000")
+    expect(io).to receive(:puts).with("05/10/2021 || 2000 || || 3000")
+    account.statement()
+  end
 end

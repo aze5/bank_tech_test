@@ -1,3 +1,5 @@
+require 'date'
+
 class BankAccount
   attr_accessor :transactions
 
@@ -16,16 +18,31 @@ class BankAccount
 
 
   def statement
-    @io.puts "date || credit || debit || balance"
+    transactions_copy = @transactions.dup
+    sorted_transactions = transactions_copy.sort_by { |t| t[:date] }
+    
     balance = 0
-    @transactions.each do |transaction|
+    @io.puts "date || credit || debit || balance"
+    
+    transaction_strings = []
+
+    sorted_transactions.each do |transaction|
       balance += transaction[:amount]
-      if transaction[:amount] > 0 
-        @io.puts "#{transaction[:date]} || #{transaction[:amount]} || || #{balance}"
+      if transaction[:amount] > 0
+        transaction_strings << "#{transaction[:date]} || #{'%.2f' % transaction[:amount]} || || #{'%.2f' % balance}"
       else
-        @io.puts "#{transaction[:date]} || || #{-transaction[:amount]} || #{balance}"
+        transaction_strings << "#{transaction[:date]} || || #{'%.2f' % -transaction[:amount]} || #{'%.2f' % balance}"
       end
     end
+    transaction_strings.reverse_each do |t|
+      @io.puts t
+    end
   end
-  
 end
+
+# account = BankAccount.new(Kernel)
+
+# account.withdraw(500, "14/01/2021")
+# account.deposit(2000, "15/01/2021")
+# account.deposit(1000, "10/01/2021")
+# account.statement

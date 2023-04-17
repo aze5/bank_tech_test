@@ -27,9 +27,9 @@ describe BankAccount do
     account.deposit(2000, "05/10/2021")
     account.withdraw(500, "06/10/2021")
     expect(io).to receive(:puts).with("date || credit || debit || balance")
-    expect(io).to receive(:puts).with("01/10/2021 || 1000 || || 1000")
-    expect(io).to receive(:puts).with("05/10/2021 || 2000 || || 3000")
-    expect(io).to receive(:puts).with("06/10/2021 || || 500 || 2500")
+    expect(io).to receive(:puts).with("06/10/2021 || || 500.00 || 2500.00")
+    expect(io).to receive(:puts).with("05/10/2021 || 2000.00 || || 3000.00")
+    expect(io).to receive(:puts).with("01/10/2021 || 1000.00 || || 1000.00")
     account.statement()
   end
 end

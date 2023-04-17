@@ -10,6 +10,10 @@ class BankAccount
     @transactions << {amount: amount, date: date}  
   end
 
+  def withdraw(amount, date)
+    @transactions << {amount: -amount, date: date}
+  end
+
 
   def statement
     @io.puts "date || credit || debit || balance"

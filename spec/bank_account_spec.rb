@@ -8,10 +8,16 @@ describe BankAccount do
     account.statement()
   end
 
-  it "makes deposits with time and date" do
+  it "makes deposits with amount and date" do
     account = BankAccount.new(Kernel)
     account.deposit(1000, "01/10/2021")
     expect(account.transactions).to eq [{amount: 1000, date:"01/10/2021"}] 
+  end
+
+  it "makes withdrawals with amount and date" do
+    account = BankAccount.new(Kernel)
+    account.withdraw(500, "01/10/2021")
+    expect(account.transactions).to eq [{amount: -500, date:"01/10/2021"}] 
   end
 
   it "statement shows with all transactions" do
@@ -19,9 +25,11 @@ describe BankAccount do
     account = BankAccount.new(io)
     account.deposit(1000, "01/10/2021")
     account.deposit(2000, "05/10/2021")
+    account.withdraw(500, "06/10/2021")
     expect(io).to receive(:puts).with("date || credit || debit || balance")
     expect(io).to receive(:puts).with("01/10/2021 || 1000 || || 1000")
     expect(io).to receive(:puts).with("05/10/2021 || 2000 || || 3000")
+    expect(io).to receive(:puts).with("06/10/2021 || || 500 || 2500")
     account.statement()
   end
 end

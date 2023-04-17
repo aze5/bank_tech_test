@@ -8,8 +8,9 @@ describe BankAccount do
     account.statement()
   end
 
-  # it "makes deposits with time and date" do
-  #   account = BankAccount.new()
-  #   account.deposit()
-  # end
+  it "makes deposits with time and date" do
+    account = BankAccount.new(Kernel)
+    account.deposit(1000, "01/10/2021")
+    expect(account.transactions).to eq [{amount: 1000, date:"01/10/2021"}] 
+  end
 end

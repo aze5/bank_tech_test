@@ -3,7 +3,7 @@ require "bank_account"
 describe BankAccount do
   it "statement prints with correct format" do
     io = double :kernel
-    account = BankAccount.new()
+    account = BankAccount.new(io)
     expect(io).to receive(:puts).with("date || credit || debit || balance")
     account.statement()
   end

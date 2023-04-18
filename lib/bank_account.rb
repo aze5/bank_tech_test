@@ -1,3 +1,4 @@
+require "date"
 
 class BankAccount
   attr_accessor :transactions
@@ -9,18 +10,32 @@ class BankAccount
   end
 
   def deposit(amount, date)
+    if amount < 0 
+      raise("Please enter an amount above zero")
+    end
     @transactions << {amount: amount, date: date}  
   end
 
   def withdraw(amount, date)
-    @transactions << {amount: -amount, date: date}
+    if amount < 0
+      raise("Please enter an amount above zero")
+    end
+    balance = 0
+    @transactions.each do |t|
+      balance += t[:amount]
+    end
+    if amount > balance
+      raise("INSUFFICIENT FUNDS")
+    else
+      @transactions << {amount: -amount, date: date}
+    end
   end
 
   # Print a statement of all transactions in the account
   def statement
     # Create a copy of the transactions array so we don't modify the original
     transactions_copy = @transactions.dup
-    sorted_transactions = transactions_copy.sort_by { |t| t[:date] }
+    sorted_transactions = transactions_copy.sort_by { |t| DateTime.parse(t[:date]) }
     
     balance = 0
     @io.puts "date || credit || debit || balance"

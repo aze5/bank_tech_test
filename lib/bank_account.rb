@@ -10,20 +10,23 @@ class BankAccount
   end
 
   def deposit(amount, date)
-    if amount < 0 
-      raise("Please enter an amount above zero")
-    end
+    more_than_zero?(amount)
     @transactions << {amount: amount, date: date}  
   end
 
-  def withdraw(amount, date)
-    if amount < 0
+  def more_than_zero?(amount)
+    if amount < 0 
       raise("Please enter an amount above zero")
     end
-    balance = 0
-    @transactions.each do |t|
-      balance += t[:amount]
-    end
+  end
+  
+  def calculate_balance
+    @transactions.sum{ |t| t[:amount] } 
+  end
+
+  def withdraw(amount, date)
+    more_than_zero?(amount)
+    balance = calculate_balance()
     if amount > balance
       raise("INSUFFICIENT FUNDS")
     else
@@ -37,15 +40,15 @@ class BankAccount
     transactions_copy = @transactions.dup
     sorted_transactions = transactions_copy.sort_by { |t| DateTime.parse(t[:date]) }
     
-    balance = 0
     @io.puts "date || credit || debit || balance"
     
+    balance = 0
+
     # Create an array to hold formatted transaction strings
     transaction_strings = []
 
     sorted_transactions.each do |transaction|
       balance += transaction[:amount]
-
       # Format transaction string based on transaction type (deposit or withdrawal)
       if transaction[:amount] > 0
         transaction_strings << "#{transaction[:date]} || #{'%.2f' % transaction[:amount]} || || #{'%.2f' % balance}"
@@ -60,3 +63,9 @@ class BankAccount
     end
   end
 end
+
+account = BankAccount.new(Kernel)
+account.deposit(2000, "05/10/2021")
+account.deposit(1000, "01/10/2021")
+account.withdraw(500, "06/10/2021")
+account.statement

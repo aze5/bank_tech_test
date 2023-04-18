@@ -14,6 +14,26 @@ describe BankAccount do
     expect(account.transactions).to eq [{amount: 1000, date:"01/09/2021"}, {amount: -500, date:"01/10/2021"}] 
   end
 
+  context "Helper Methods" do
+    it "calculates the correct balance" do
+      account = BankAccount.new(Kernel)
+      account.deposit(2000, "05/10/2021")
+      account.deposit(1000, "01/10/2021")
+      account.withdraw(500, "06/10/2021")
+      expect(account.calculate_balance).to eq 2500
+    end
+  
+    it "Checks if an amount is more than zero" do
+      account = BankAccount.new(Kernel)
+      expect(account.more_than_zero?(3)).to eq nil 
+    end
+
+    it "Fails if an amount is less than zero" do
+      account = BankAccount.new(Kernel)
+      expect{ account.more_than_zero?(-3) }.to raise_error "Please enter an amount above zero"
+    end
+  end
+
   context "statement method" do
     it "statement prints with correct format" do
       io = double :kernel
@@ -47,7 +67,7 @@ describe BankAccount do
       account.statement
     end
   
-    it "does not change balance after withdrawing zero amount" do        account = BankAccount.new(Kernel)
+    it "does not change balance after withdrawing zero amount" do       
       io = double :kernel
       account = BankAccount.new(io)
       account.deposit(2000, "05/09/2021")

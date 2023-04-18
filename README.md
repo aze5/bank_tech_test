@@ -1,6 +1,5 @@
 # Bank Account
-  - This is a Ruby program consisting of a `BankAccount` class that represents a simple bank account. The class has methods to deposit and withdraw money from the account and a statement method to print a statement of all transactions in the account.
-
+  This is a Ruby program consisting of a `BankAccount` class that represents a simple bank account. The class has methods to deposit and withdraw money from the account and a statement method to print a statement of all transactions in the account.
 
 # Class methods
   ### `initialize(kernel)`

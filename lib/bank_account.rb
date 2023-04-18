@@ -34,6 +34,15 @@ class BankAccount
     end
   end
 
+  # Format transaction string based on transaction type (deposit or withdrawal)
+  def format_transaction_string(transaction, balance)
+    if transaction[:amount] > 0
+      return "#{transaction[:date]} || #{'%.2f' % transaction[:amount]} || || #{'%.2f' % balance}"
+    else
+      return "#{transaction[:date]} || || #{'%.2f' % -transaction[:amount]} || #{'%.2f' % balance}"
+    end
+  end
+
   # Print a statement of all transactions in the account
   def statement
     # Create a copy of the transactions array so we don't modify the original
@@ -41,22 +50,15 @@ class BankAccount
     sorted_transactions = transactions_copy.sort_by { |t| DateTime.parse(t[:date]) }
     
     @io.puts "date || credit || debit || balance"
-    
-    balance = 0
 
     # Create an array to hold formatted transaction strings
     transaction_strings = []
-
+    balance = 0
     sorted_transactions.each do |transaction|
       balance += transaction[:amount]
-      # Format transaction string based on transaction type (deposit or withdrawal)
-      if transaction[:amount] > 0
-        transaction_strings << "#{transaction[:date]} || #{'%.2f' % transaction[:amount]} || || #{'%.2f' % balance}"
-      else
-        transaction_strings << "#{transaction[:date]} || || #{'%.2f' % -transaction[:amount]} || #{'%.2f' % balance}"
-      end
+      transaction_strings << format_transaction_string(transaction, balance)
     end
-
+    
     # Print transaction strings in reverse order (latest transactions first)
     transaction_strings.reverse_each do |t|
       @io.puts t
